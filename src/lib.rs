@@ -10,19 +10,21 @@ use std::{
 pub fn client() {
     let mut connection = TcpStream::connect("127.0.0.1:7878").unwrap();
 
-    let mut message = String::from("[Client]: ");
-    let mut input = String::new();
+    loop {
+        let mut message = String::from("[Client]: ");
+        let mut input = String::new();
 
-    io::stdin().read_line(&mut input).expect("Client Error");
-    message.push_str(input.as_str());
+        io::stdin().read_line(&mut input).expect("Client Error");
+        message.push_str(input.as_str());
 
-    connection
-        .write(message.as_bytes())
-        .expect("Error in Sending Client Message to Server");
+        connection
+            .write(message.as_bytes())
+            .expect("Error in Sending Client Message to Server");
 
-    connection
-        .flush()
-        .expect("Error in Sending Client Message to Server");
+        connection
+            .flush()
+            .expect("Error in Sending Client Message to Server")
+    }
 }
 
 pub fn server() {
