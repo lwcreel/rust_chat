@@ -17,9 +17,9 @@ pub fn server() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
 
     // server thread
-    //thread::spawn(|| {
-    //    handle_server();
-    //});
+    thread::spawn(|| {
+        handle_server();
+    });
     for stream in listener.incoming() {
         let stream = stream.unwrap();
 
@@ -33,4 +33,21 @@ pub fn server() {
             }
         });
     }
+}
+
+fn handle_server() {
+    println!("Waiting for Chatters...");
+    loop {
+        let mut message = String::from("[Server]: ");
+        let mut input = String::new();
+
+        io::stdin().read_line(&mut input).expect("Server Error");
+        message.push_str(String::as_str(&input));
+
+        broadcast(String::as_str(&message));
+    }
+}
+
+fn broadcast(message: &str) {
+    print!("{}", message);
 }
