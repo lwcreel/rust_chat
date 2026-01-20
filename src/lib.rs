@@ -41,7 +41,7 @@ pub fn server() {
             let mut reader = BufReader::new(&stream);
             let mut buffer = String::new();
 
-            match reader.read_to_string(&mut buffer) {
+            match reader.read_line(&mut buffer) {
                 Ok(_) => println!("{}", buffer),
                 Err(e) => println!("Read Error: {}", e),
             }
