@@ -37,15 +37,7 @@ pub fn server() {
     for stream in listener.incoming() {
         let stream = stream.unwrap();
 
-        thread::spawn(move || {
-            let mut reader = BufReader::new(&stream);
-            let mut buffer = String::new();
-
-            match reader.read_line(&mut buffer) {
-                Ok(_) => println!("{}", buffer),
-                Err(e) => println!("Read Error: {}", e),
-            }
-        });
+        thread::spawn(move || handle_client(stream));
     }
 }
 
@@ -59,6 +51,20 @@ fn handle_server() {
         message.push_str(String::as_str(&input));
 
         broadcast(String::as_str(&message));
+    }
+}
+
+fn handle_client(stream: TcpStream) {
+    println!("Hello, New Chatter!");
+
+    loop {
+        let mut reader = BufReader::new(&stream);
+        let mut buffer = String::new();
+
+        match reader.read_line(&mut buffer) {
+            Ok(_) => println!("{}", buffer),
+            Err(e) => println!("Read Error: {}", e),
+        }
     }
 }
 
