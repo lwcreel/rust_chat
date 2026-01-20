@@ -75,5 +75,5 @@ fn handle_client(stream: TcpStream) {
 }
 
 fn broadcast(message: &str) {
-    print!("{}", message);
+    println!("{}", message);
 }
