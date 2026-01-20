@@ -1,4 +1,5 @@
 use std::{
+    fmt::Debug,
     fs,
     io::{self, BufReader, prelude::*, stdin},
     net::{TcpListener, TcpStream},
@@ -8,14 +9,19 @@ use std::{
 };
 
 pub fn client() {
-    let mut connection = TcpStream::connect("127.0.0.1:7878").unwrap();
+    println!("Please Enter Your Username: ");
+    let mut username = String::new();
+    io::stdin().read_line(&mut username).expect("Client Error");
+    let username = username.trim_end();
 
+    let mut connection = TcpStream::connect("127.0.0.1:7878").unwrap();
     loop {
-        let mut message = String::from("[Client]: ");
+        let mut message = String::from(format!("[{}]: ", username));
         let mut input = String::new();
 
         io::stdin().read_line(&mut input).expect("Client Error");
         message.push_str(input.as_str());
+        message.push_str("\n");
 
         connection
             .write(message.as_bytes())
