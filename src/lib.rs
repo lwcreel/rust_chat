@@ -8,6 +8,16 @@ use std::{
     thread,
 };
 
+pub struct Server {
+    listener: TcpListener,
+    connections: Vec<Client>,
+}
+
+pub struct Client {
+    username: String,
+    connection: TcpStream,
+}
+
 pub fn client() {
     println!("Please Enter Your Username: ");
     let mut username = String::new();
@@ -34,16 +44,21 @@ pub fn client() {
 }
 
 pub fn server() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+    let mut server = Server {
+        listener: TcpListener::bind("127.0.0.1:7878").unwrap(),
+        connections: Vec::new(),
+    };
 
     // server thread
     thread::spawn(|| {
         handle_server();
     });
-    for stream in listener.incoming() {
-        let stream = stream.unwrap();
 
-        thread::spawn(move || handle_client(stream));
+    for stream in server.listener.incoming() {
+        server.connections.push(Client {
+            connection: stream.unwrap(),
+            username: String::from("temp"),
+        });
     }
 }
 

@@ -6,6 +6,8 @@ fn main() {
 
     let mode = &args[1];
 
+    println!("{}", mode);
+
     if mode == "server" {
         server();
     } else {
