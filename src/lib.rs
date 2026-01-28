@@ -7,11 +7,12 @@ use std::{
 pub struct Server {
     listener: TcpListener,
     connections: Vec<Client>,
+    message: String,
 }
 
 pub struct Client {
     username: String,
-    connection: TcpStream,
+    connection: BufReader<TcpStream>,
 }
 
 pub fn client() {
@@ -43,6 +44,7 @@ pub fn server() {
     let mut server = Server {
         listener: TcpListener::bind("127.0.0.1:7878").unwrap(),
         connections: Vec::new(),
+        message: String::new(),
     };
 
     // server thread
@@ -52,9 +54,19 @@ pub fn server() {
 
     for stream in server.listener.incoming() {
         server.connections.push(Client {
-            connection: stream.unwrap(),
+            connection: BufReader::new(stream.unwrap()),
             username: String::from("temp"),
         });
+    }
+
+    loop {
+        for client in server.connections.iter() {
+            let mut input = String::new();
+            client.connection.read_line(&mut input).unwrap();
+            if input.len() > 0 {
+                server.message = input
+            }
+        }
     }
 }
 
