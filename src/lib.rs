@@ -1,10 +1,6 @@
 use std::{
-    fmt::Debug,
-    fs,
-    io::{self, BufReader, prelude::*, stdin},
+    io::{self, BufReader, prelude::*},
     net::{TcpListener, TcpStream},
-    str::FromStr,
-    sync::{Arc, RwLock},
     thread,
 };
 
